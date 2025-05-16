@@ -1,0 +1,9 @@
+.calendar {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  font-family: 'Playfair Display', serif;
+}
