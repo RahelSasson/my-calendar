@@ -3,7 +3,7 @@
 A web based **Mood Diary Calendar** app built with **React JS** and **TypeScript**. 
 App used to track your daily mood and note entries with a weekly calendar view.  
 
-Data is saved in `ocal storage and managed globally via context.
+Data is saved in local storage and managed globally via context.
 
 ---
 
