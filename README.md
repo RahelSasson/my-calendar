@@ -33,7 +33,8 @@ src/
   │   ├── HomeView.tsx
   │   ├── MoodPicker.tsx
   │   ├── MoodTrackerApp.tsx
-  ├--
+  ├-- assets/
+  │   ├── cloud-sun.png
   ```
 
 ### Deployment

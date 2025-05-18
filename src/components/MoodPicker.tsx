@@ -3,6 +3,8 @@
 
 import React from 'react';
 import './MoodPicker.css';
+import cloudSun from '../assets/cloud-sun.png';
+
 
 type Mood = {
   emoji: string;
@@ -41,7 +43,7 @@ export default function MoodPicker({ date, onClose, onSelectMood }: MoodPickerPr
   return (
     <div className="mood-picker-bubble">
       <img
-        src="cloud-sun.png"
+        src={cloudSun}
         alt="Cloud background"
         className="mood-picker-image"
         aria-hidden="true"
