@@ -1,4 +1,4 @@
-//Floating pop up that comes up when the user licks on a day in the calendar 
+//Floating pop up that comes up when the user clicks on a day in the calendar 
 //Allows the user to select a mood emoji for a specific day 
 
 import React from 'react';

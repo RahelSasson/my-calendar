@@ -1,7 +1,7 @@
 //Home screen view for the mood tracker, which displays: 
 //The current week calendar 
 //Mood emojis that can be selected by the user to choose their mood for that day 
-//A textarea for diary entries 
+//A text area for diary entries 
 //A save button that isnt functional yet 
 //Allows for nivagtion between weeks just as Calendar.tsx allows for navigation between months 
 
@@ -79,7 +79,7 @@ const HomeView = ({ entries, setEntries }: HomeViewProps) => {
     setEntries(prev => ({
       ...prev,
       [key]: {
-        ...prev[key],  // merge with existing mood 
+        ...prev[key],  
         note: updatedNote,
       }
     }));
