@@ -1,14 +1,36 @@
+//Displays Moods per day, using emoji icons 
+//Allows the user to navigate between months and years (2025-2030)
+//Opens a mood picker when a date is clicked, letting users choose a mood for a specific day 
+//Stores selected mood data in the entries state, which is synched wit the rest of the app 
+
 import React, { useState } from 'react';
 import { getDay, getDaysInMonth, format } from 'date-fns';
 import MoodPicker from './MoodPicker';
 import './Calendar.css';
+
+interface Entry {
+  mood?: string;
+  note?: string;
+}
+
+interface CalendarProps {
+  entries: Record<string, Entry>;
+  setEntries: React.Dispatch<React.SetStateAction<Record<string, Entry>>>;
+}
 
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const START_YEAR = 2025;
 const END_YEAR = 2030;
 
-export default function Calendar() {
+function formatKey(date: Date): string {
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, '0');
+  const d = date.getDate().toString().padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+export default function Calendar({ entries, setEntries }: CalendarProps) {
   const today = new Date();
 
   const [year, setYear] = useState(today.getFullYear());
@@ -17,7 +39,6 @@ export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showMoodPicker, setShowMoodPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-  const [moodByDay, setMoodByDay] = useState<{ [key: string]: string }>({});
 
   const date = new Date(year, month);
   const daysInMonth = getDaysInMonth(date);
@@ -49,45 +70,57 @@ export default function Calendar() {
   const handleDayClick = (day: number, event: React.MouseEvent<HTMLDivElement>) => {
     const rect = (event.currentTarget as HTMLDivElement).getBoundingClientRect();
     setSelectedDate(new Date(year, month, day));
-    setPickerPosition({ top: rect.top - 130, left: rect.left + 40 }); 
+    setPickerPosition({ top: rect.top - 130, left: rect.left + 40 });
     setShowMoodPicker(true);
   };
 
   const handleMoodSelect = (mood: { emoji: string }) => {
     if (!selectedDate) return;
-    const key = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-    setMoodByDay((prev) => ({ ...prev, [key]: mood.emoji }));
+    const key = formatKey(selectedDate);
+    setEntries(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        mood: mood.emoji,
+      },
+    }));
     setShowMoodPicker(false);
   };
 
   return (
     <div className="calendar">
       <div className="calendar-header">
-        <button className="nav-button" onClick={goToPreviousMonth}>←</button>
+        <button className="arrow left" onClick={goToPreviousMonth}>
+          &lt;
+        </button>
         <h2 className="month-label">{format(new Date(year, month), 'MMMM yyyy')}</h2>
-        <button className="nav-button" onClick={goToNextMonth}>→</button>
+        <button className="arrow right" onClick={goToNextMonth}>
+          &gt;
+        </button>
       </div>
 
       <div className="calendar-weekdays">
-        {weekdays.map((day) => (
-          <div key={day} className="weekday">{day}</div>
+        {weekdays.map(day => (
+          <div key={day} className="weekday">
+            {day}
+          </div>
         ))}
       </div>
 
       <div className="calendar-grid">
         {calendarSlots.map((day, i) => {
-          const key = day ? `${year}-${month + 1}-${day}` : `blank-${i}`;
+          const key = day ? formatKey(new Date(year, month, day)) : `blank-${i}`;
           return (
             <div
               key={key}
               className="calendar-day"
-              onClick={(e) => day && handleDayClick(day, e)}
+              onClick={e => day && handleDayClick(day, e)}
               style={{ cursor: day ? 'pointer' : 'default', position: 'relative' }}
             >
               {day && (
                 <>
                   <span>{day}</span>
-                  {moodByDay[key] && (
+                  {entries[key]?.mood && (
                     <span
                       style={{
                         position: 'absolute',
@@ -97,7 +130,7 @@ export default function Calendar() {
                       }}
                       aria-label="Mood emoji"
                     >
-                      {moodByDay[key]}
+                      {entries[key].mood}
                     </span>
                   )}
                 </>
@@ -116,11 +149,7 @@ export default function Calendar() {
             zIndex: 1000,
           }}
         >
-          <MoodPicker
-            date={selectedDate}
-            onClose={() => setShowMoodPicker(false)}
-            onSelectMood={handleMoodSelect}
-          />
+          <MoodPicker date={selectedDate} onClose={() => setShowMoodPicker(false)} onSelectMood={handleMoodSelect} />
         </div>
       )}
     </div>
