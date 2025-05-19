@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { getDay, getDaysInMonth, format } from 'date-fns';
 import MoodPicker from './MoodPicker';
-import moodColors from './moodColors'; // ✅ added
+import moodColors from './moodColors'; 
 import './Calendar.css';
 
 interface Entry {
