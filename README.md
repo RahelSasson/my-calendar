@@ -9,7 +9,7 @@ Data is saved in local storage.
 
 ## Features
 
-- Weekly calendar showing mood entries per day  
+- Weekly calendar showing mood entries per day with mood-associated colors
 - Select and modify mood and diary entries for any day  
 - Tabs for Calendar view and Home view  
 

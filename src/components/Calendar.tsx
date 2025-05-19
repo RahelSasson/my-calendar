@@ -1,4 +1,4 @@
-//Displays Moods per day, using emoji icons 
+//Displays Moods per day and color associated with that mood, using emoji icons 
 //Allows the user to navigate between months and years (2025-2030)
 //Opens a mood picker when a date is clicked, letting users choose a mood for a specific day 
 //Stores selected mood data in the entries state, which is synched wit the rest of the app 
@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { getDay, getDaysInMonth, format } from 'date-fns';
 import MoodPicker from './MoodPicker';
+import moodColors from './moodColors'; // ✅ added
 import './Calendar.css';
 
 interface Entry {
@@ -110,17 +111,24 @@ export default function Calendar({ entries, setEntries }: CalendarProps) {
       <div className="calendar-grid">
         {calendarSlots.map((day, i) => {
           const key = day ? formatKey(new Date(year, month, day)) : `blank-${i}`;
+          const mood = day ? entries[key]?.mood : undefined;
+          const bgColor = mood ? moodColors[mood] : '#d3e7f7'; 
+
           return (
             <div
               key={key}
               className="calendar-day"
               onClick={e => day && handleDayClick(day, e)}
-              style={{ cursor: day ? 'pointer' : 'default', position: 'relative' }}
+              style={{
+                cursor: day ? 'pointer' : 'default',
+                position: 'relative',
+                backgroundColor: bgColor,
+              }}
             >
               {day && (
                 <>
                   <span>{day}</span>
-                  {entries[key]?.mood && (
+                  {mood && (
                     <span
                       style={{
                         position: 'absolute',
@@ -130,7 +138,7 @@ export default function Calendar({ entries, setEntries }: CalendarProps) {
                       }}
                       aria-label="Mood emoji"
                     >
-                      {entries[key].mood}
+                      {mood}
                     </span>
                   )}
                 </>
